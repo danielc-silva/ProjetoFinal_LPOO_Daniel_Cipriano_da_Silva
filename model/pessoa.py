@@ -40,11 +40,6 @@ class Pessoa(ABC):
         else:
             raise ValueError("O telefone deve conter ao menos 11 dígitos numéricos incluindo o DDD.")
 
-    # método para tornar a class pessoa abstrat
-    @abstractmethod
-    def obter_identificacao_profissional(self):
-        pass
-
     @staticmethod
     def validar_cpf(cpf):
         cpf_numeros = ''.join(filter(str.isdigit, str(cpf)))
@@ -58,28 +53,12 @@ class Pessoa(ABC):
             if digito != int(cpf_numeros[i]):
                 return False
         return True
-
-
-
-
-
-
-class Veterinario(Pessoa):
-    def __init__(self, cpf, nome, telefone, crmv, especialidade):
-        super().__init__(cpf, nome, telefone)
-        self.crmv = crmv
-        self.especialidade = especialidade
-
-    @property
-    def crmv(self):
-        return self.__crmv
     
-    @crmv.setter
-    def crmv(self, valor):
-        if isinstance(valor, str) and valor.strip():
-            self.__crmv = valor.strip()
-        else:
-            raise ValueError("O CRMV deve ser um valor válido.")
-
+    # método para tornar a class pessoa abstrat
+    @abstractmethod
     def obter_identificacao_profissional(self):
-        return f"Veterinário(a) {self.nome} - CRMV: {self.crmv} ({self.especialidade})"
+        pass
+
+    @abstractmethod
+    def exibir_informacoes(self):
+        pass

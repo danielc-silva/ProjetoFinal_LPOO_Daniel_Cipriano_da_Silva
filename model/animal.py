@@ -75,21 +75,3 @@ class Animal(ABC):
         except ValueError:
             raise ValueError(f"ERRO: Data '{data_recebida}' em formato inválido. Use DD-MM-YYYY.")
 
-
-class Macho(Animal):
-    def __init__(self, brinco, raca, data_nascimento, peso, lote=None, castrado=False):
-        super().__init__(brinco, raca, data_nascimento, peso, lote)
-        self.castrado = castrado
-
-
-class Femea(Animal):
-    def __init__(self, brinco, raca, data_nascimento, peso, lote=None):
-        super().__init__(brinco, raca, data_nascimento, peso, lote)
-        self.estado_reprodutivo = "Vazia" 
-        self.data_ultima_inseminacao = None
-
-    def inseminar(self, data):
-        pass
-        
-    def confirmar_prenhez(self):
-        pass
