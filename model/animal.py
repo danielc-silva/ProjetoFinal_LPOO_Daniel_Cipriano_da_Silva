@@ -3,12 +3,10 @@ from datetime import date, datetime
 from model.raca import Raca
 
 class Animal(ABC):
-    def __init__(self, brinco, raca, data_nascimento, peso, lote=None):
+    def __init__(self, brinco, raca, data_nascimento):
         self.brinco = brinco
         self.raca = raca
         self.data_nascimento = data_nascimento
-        self.peso = peso
-        self.lote = lote
 
     @property
     def brinco(self):
@@ -47,23 +45,6 @@ class Animal(ABC):
         else:
             self.__data_nascimento = None
 
-    @property
-    def peso(self):
-        return self.__peso
-    
-    @peso.setter
-    def peso(self, valor):
-        if valor > 0:
-            self.__peso = valor
-        else:
-            raise ValueError("O peso deve ser um valor positivo.")
-
-    def transferir_lote(self, novo_lote):
-        self.lote = novo_lote
-        
-    def atualizar_peso(self, novo_peso):
-        self.peso = novo_peso
-
     def valida_data(self, data_recebida):
         if data_recebida is None:
             return None
@@ -74,4 +55,3 @@ class Animal(ABC):
             return temporario.date()
         except ValueError:
             raise ValueError(f"ERRO: Data '{data_recebida}' em formato inválido. Use DD-MM-YYYY.")
-

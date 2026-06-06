@@ -1,8 +1,8 @@
 from animal import Animal
 
 class Femea(Animal):
-    def __init__(self, brinco, raca, data_nascimento, peso, lote=None):
-        super().__init__(brinco, raca, data_nascimento, peso, lote)
+    def __init__(self, brinco, raca, data_nascimento):
+        super().__init__(brinco, raca, data_nascimento)
         self.estado_reprodutivo = "Vazia" 
         self.data_ultima_inseminacao = None
 
