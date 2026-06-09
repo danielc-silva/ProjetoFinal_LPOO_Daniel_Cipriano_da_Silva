@@ -1,4 +1,4 @@
-from animal import Animal
+from model.animal import Animal
 
 class Femea(Animal):
     def __init__(self, brinco, raca, data_nascimento):

@@ -1,4 +1,4 @@
-from pessoa import Pessoa
+from model.pessoa import Pessoa
 
 class Proprietario(Pessoa):
     def __init__(self, cpf, nome, telefone, inscricao_estadual, nome_fazenda):

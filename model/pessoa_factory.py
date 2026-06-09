@@ -1,6 +1,5 @@
-from proprietario import Proprietario
-# Importando o Veterinario (estou assumindo que você criará/já criou essa classe)
-from veterinario import Veterinario 
+from model.proprietario import Proprietario
+from model.veterinario import Veterinario
 
 class PessoaFactory:
     

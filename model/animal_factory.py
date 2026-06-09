@@ -1,5 +1,5 @@
-from femea import Femea
-from macho import Macho
+from model.femea import Femea
+from model.macho import Macho
 
 class AnimalFactory:
     

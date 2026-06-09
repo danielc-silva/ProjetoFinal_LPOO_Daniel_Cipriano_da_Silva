@@ -32,7 +32,7 @@ class PessoaDAO:
                 raise ValueError("Tipo de pessoa desconhecido.")
 
             query = """
-                INSERT INTO pessoas (cpf, nome, telefone, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv) 
+                INSERT INTO tb_pessoas (cpf, nome, telefone, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv) 
                 VALUES (%s, %s, %s, %s, %s, %s, %s)
             """            
             valores = (
@@ -79,7 +79,7 @@ class PessoaDAO:
                 raise ValueError("Tipo de pessoa desconhecido.")
 
             query = """
-                UPDATE pessoas
+                UPDATE tb_pessoas
                 SET nome = %s, 
                     telefone = %s,
                     tipo_pessoa = %s, 
@@ -123,7 +123,7 @@ class PessoaDAO:
         try:
             cursor = self.conexao.cursor()
 
-            query = "DELETE FROM pessoas WHERE cpf = %s"
+            query = "DELETE FROM tb_pessoas WHERE cpf = %s"
             
             cursor.execute(query, (cpf,))
             self.conexao.commit()
@@ -147,7 +147,7 @@ class PessoaDAO:
                 
         try:
             cursor = self.conexao.cursor()
-            query = "SELECT cpf, nome, telefone, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv FROM pessoas"
+            query = "SELECT cpf, nome, telefone, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv FROM tb_pessoas"
             
             cursor.execute(query) 
             linhas = cursor.fetchall()
@@ -181,7 +181,7 @@ class PessoaDAO:
                 
         try:
             cursor = self.conexao.cursor()
-            query = "SELECT cpf, nome, telefone, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv FROM pessoas WHERE cpf = %s"
+            query = "SELECT cpf, nome, telefone, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv FROM tb_pessoas WHERE cpf = %s"
             
             cursor.execute(query, (cpf,))
             linha = cursor.fetchone() 

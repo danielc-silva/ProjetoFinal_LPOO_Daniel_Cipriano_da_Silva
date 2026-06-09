@@ -154,7 +154,7 @@ class AnimalDAO:
 
                 obj = AnimalFactory.criar_animal(
                     tipo_animal=linha[3],
-                    brinco=linha[0], 
+                    brinco=int(linha[0]),
                     raca=raca_enum, 
                     data_nascimento=linha[2],
                     castrado=linha[4]
@@ -194,7 +194,7 @@ class AnimalDAO:
 
                 animal_encontrado = AnimalFactory.criar_animal(
                     tipo_animal=linha[3],
-                    brinco=linha[0], 
+                    brinco=int(linha[0]),
                     raca=raca_enum, 
                     data_nascimento=linha[2],
                     castrado=linha[4]
