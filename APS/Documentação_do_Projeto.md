@@ -51,100 +51,126 @@ O diagrama reflete nossas regras de negócio e controle de acesso, evidenciando 
 
 ## 3. Especificação dos Casos de Uso
 
-**UC01 - Gerenciar Pessoas**
-* **Atores:** Proprietário.
-* **Pré-condições:** O usuário deve estar autenticado no sistema com perfil de Proprietário.
-* **Fluxo Principal:**
-    1. O Proprietário acessa o módulo de gestão de pessoas.
-    2. Insere ou altera os dados (CPF, Nome, Telefone, e CRMV no caso de veterinários).
-    3. O sistema valida os dados e salva as informações no banco de dados.
-* **Pós-condições:** Perfil registrado e habilitado para interagir com o sistema.
+### UC01 - Gerenciar Pessoas
+**Atores:** Proprietário
+**Pré-condições:** Nenhuma
+**Fluxo Principal:**
+1. O usuário acessa o módulo de gestão de pessoas.
+2. Insere ou altera os dados (CPF, Nome, Telefone, e CRMV no caso de veterinários).
+3. O sistema valida os dados e salva as informações no banco de dados.
 
-**UC02 - Gerenciar Animais**
-* **Atores:** Proprietário.
-* **Pré-condições:** O usuário deve estar autenticado com perfil de Proprietário.
-* **Fluxo Principal:**
-    1. O Proprietário informa os dados da matriz bovina (Brinco, Raça).
-    2. O sistema define o estado reprodutivo inicial da fêmea como "Vazia".
-    3. O sistema persiste o animal no banco de dados.
-* **Fluxos Alternativos:**
-    * *Brinco Duplicado:* O sistema bloqueia o cadastro se o número de identificação já existir.
-* **Pós-condições:** Matriz bovina disponível para receber registros de manejo.
+**Pós-condições:** Perfil registrado e habilitado para ser selecionado como responsável no sistema.
 
-**UC03 - Registrar Inseminação**
-* **Atores:** Proprietário, Veterinário.
-* **Pré-condições:** A fêmea selecionada deve estar no estado "Vazia".
-* **Fluxo Principal:**
-    1. O usuário seleciona a fêmea e a data do procedimento de inseminação.
-    2. O sistema aciona o *`<<include>>`* **validar_responsavel**.
-    3. O sistema altera o estado da fêmea para "Inseminada".
-    4. O sistema gera uma nova linha na tabela de histórico de manejo.
-* **Fluxos Alternativos:**
-    * *Estado Incorreto:* O sistema bloqueia a ação caso a matriz não esteja "Vazia".
-* **Pós-condições:** Estado atualizado para "Inseminada" e evento salvo no histórico.
+---
 
-**UC04 - Registrar Aborto**
-* **Atores:** Proprietário, Veterinário.
-* **Pré-condições:** A fêmea selecionada deve estar obrigatoriamente no estado "Prenha".
-* **Fluxo Principal:**
-    1. O usuário seleciona a fêmea e a opção de registrar aborto, informando a data.
-    2. O sistema aciona o *`<<include>>`* **validar_responsavel**.
-    3. O sistema altera automaticamente o estado da matriz de "Prenha" para "Vazia".
-    4. O sistema salva o evento negativo no histórico de manejo.
-* **Fluxos Alternativos:**
-    * *Estado Incorreto:* O sistema impede o registro se a fêmea não estiver "Prenha".
-* **Pós-condições:** Gestação interrompida no sistema, estado retorna para "Vazia" e histórico é gravado.
+### UC02 - Gerenciar Animais
+**Atores:** Proprietário
+**Pré-condições:** Nenhuma
+**Fluxo Principal:**
+1. O usuário informa os dados da matriz bovina (Brinco, Raça).
+2. O sistema define o estado reprodutivo inicial da fêmea como "Vazia".
+3. O sistema persiste o animal no banco de dados.
 
-**UC05 - Registrar Parto**
-* **Atores:** Proprietário, Veterinário.
-* **Pré-condições:** A fêmea selecionada deve estar no estado "Prenha".
-* **Fluxo Principal:**
-    1. O usuário informa a data do nascimento do bezerro.
-    2. O sistema aciona o *`<<include>>`* **validar_responsavel**.
-    3. O sistema altera o estado da fêmea de "Prenha" para "Vazia".
-    4. O sistema salva o evento no histórico de manejo.
-* **Fluxos Alternativos:**
-    * *Estado Incorreto:* O sistema bloqueia caso não haja gestação confirmada.
-* **Pós-condições:** Ciclo concluído com sucesso, matriz pronta para nova estação de monta.
+**Fluxos Alternativos:** * **Brinco Duplicado:** O sistema bloqueia o cadastro se o número de identificação já existir no banco.
 
-**UC06 - Registrar Diagnóstico (Toque)**
-* **Atores:** Veterinário.
-* **Pré-condições:** A fêmea deve estar no estado "Inseminada" e o usuário logado deve possuir CRMV válido.
-* **Fluxo Principal:**
-    1. O Veterinário seleciona a fêmea e informa a data do exame clínico.
-    2. O sistema aciona o *`<<include>>`* **validar_responsavel** para confirmação das credenciais técnicas.
-    3. O Veterinário informa o resultado do diagnóstico.
-    4. O sistema registra o laudo técnico com assinatura do profissional no histórico.
-* **Fluxos Alternativos:**
-    * *Acesso Negado:* Proprietário tenta acessar a funcionalidade e é bloqueado pelo sistema.
-    * *Toque Positivo:* O sistema aciona o *`<<extend>>`* **mudar_para_prenha**.
-    * *Toque Negativo:* O sistema aciona o *`<<extend>>`* **mudar_para_vazia**.
-* **Pós-condições:** Laudo técnico salvo e estado da matriz atualizado conforme o resultado do exame.
+**Pós-condições:** Matriz bovina disponível para receber registros de manejo.
 
-**UC07 - Validar Responsável (`<<include>>`)**
-* **Atores:** Sistema (acionado internamente).
-* **Pré-condições:** O usuário deve ter disparado um evento de manejo (Inseminação, Parto, Aborto ou Diagnóstico).
-* **Fluxo Principal:**
-    1. O sistema recebe a requisição de evento.
-    2. Verifica qual usuário está logado ou selecionado como autor da ação.
-    3. Confere se o perfil possui as permissões necessárias (ex: exigência de CRMV para laudos).
-    4. Carimba o CPF do responsável no registro a ser salvo.
-* **Pós-condições:** Evento autorizado e atrelado ao responsável correto para o histórico de manejo.
+---
 
-**UC08 - Mudar para Prenha (`<<extend>>`)**
-* **Atores:** Sistema (acionado internamente).
-* **Pré-condições:** O Veterinário registrou um laudo "Positivo" no UC06.
-* **Fluxo Principal:**
-    1. O sistema intercepta o resultado positivo do toque.
-    2. Aplica a regra de negócio do Padrão State, instanciando o estado "Prenha" para a fêmea.
-    3. Atualiza a coluna de estado no banco de dados.
-* **Pós-condições:** Matriz assume o estado gestacional com sucesso.
+### UC03 - Registrar Inseminação
+**Atores:** Proprietário, Veterinário
+**Pré-condições:** A fêmea selecionada deve estar no estado "Vazia".
+**Fluxo Principal:**
+1. O usuário seleciona a fêmea, a data do procedimento e a pessoa responsável.
+2. O sistema aciona o `<<include>>` **validar_responsavel**.
+3. O sistema altera o estado da fêmea para "Inseminada".
+4. O sistema gera uma nova linha na tabela de histórico de manejo.
 
-**UC09 - Mudar para Vazia (`<<extend>>`)**
-* **Atores:** Sistema (acionado internamente).
-* **Pré-condições:** O Veterinário registrou um laudo "Negativo" no UC06.
-* **Fluxo Principal:**
-    1. O sistema intercepta o resultado negativo do toque (falha na inseminação).
-    2. Aplica a regra de negócio do Padrão State, instanciando o estado "Vazia" para a fêmea.
-    3. Atualiza a coluna de estado no banco de dados.
-* **Pós-condições:** Matriz retorna ao estado inicial, pronta para nova tentativa na estação de monta.
+**Fluxos Alternativos:** * **Estado Incorreto:** O sistema bloqueia a ação caso a matriz não esteja "Vazia".
+
+**Pós-condições:** Estado atualizado para "Inseminada" e evento salvo no histórico.
+
+---
+
+### UC04 - Registrar Aborto
+**Atores:** Proprietário, Veterinário
+**Pré-condições:** A fêmea selecionada deve estar obrigatoriamente no estado "Prenha".
+**Fluxo Principal:**
+1. O usuário seleciona a fêmea, o responsável e a opção de registrar aborto, informando a data.
+2. O sistema aciona o `<<include>>` **validar_responsavel**.
+3. O sistema altera automaticamente o estado da matriz de "Prenha" para "Vazia".
+4. O sistema salva o evento negativo no histórico de manejo.
+
+**Fluxos Alternativos:** * **Estado Incorreto:** O sistema impede o registro se a fêmea não estiver "Prenha".
+
+**Pós-condições:** Gestação interrompida no sistema, estado retorna para "Vazia" e histórico é gravado.
+
+---
+
+### UC05 - Registrar Parto
+**Atores:** Proprietário, Veterinário
+**Pré-condições:** A fêmea selecionada deve estar no estado "Prenha".
+**Fluxo Principal:**
+1. O usuário informa a data do nascimento do bezerro e o responsável pelo parto.
+2. O sistema aciona o `<<include>>` **validar_responsavel**.
+3. O sistema altera o estado da fêmea de "Prenha" para "Vazia".
+4. O sistema salva o evento no histórico de manejo.
+
+**Fluxos Alternativos:** * **Estado Incorreto:** O sistema bloqueia caso não haja gestação confirmada.
+
+**Pós-condições:** Ciclo concluído com sucesso, matriz pronta para nova estação de monta.
+
+---
+
+### UC06 - Registrar Diagnóstico (Toque)
+**Atores:** Veterinário
+**Pré-condições:** A fêmea deve estar no estado "Inseminada".
+**Fluxo Principal:**
+1. O usuário seleciona a fêmea, informa a data do exame clínico e seleciona o Veterinário responsável.
+2. O sistema aciona o `<<include>>` **validar_responsavel** para confirmação das credenciais técnicas (CRMV).
+3. O usuário informa o resultado do diagnóstico.
+4. O sistema registra o laudo técnico com assinatura do profissional no histórico.
+
+**Fluxos Alternativos:**
+* **Acesso Negado:** O sistema bloqueia a ação se a pessoa selecionada como responsável não tiver perfil de Veterinário.
+* **Toque Positivo:** O sistema aciona o `<<extend>>` **mudar_para_prenha**.
+* **Toque Negativo:** O sistema aciona o `<<extend>>` **mudar_para_vazia**.
+
+**Pós-condições:** Laudo técnico salvo e estado da matriz atualizado conforme o resultado do exame.
+
+---
+
+### UC07 - Validar Responsável (`<<include>>`)
+**Atores:** Sistema (acionado internamente)
+**Pré-condições:** O usuário deve ter disparado um evento de manejo (Inseminação, Parto, Aborto ou Diagnóstico).
+**Fluxo Principal:**
+1. O sistema recebe a requisição de evento.
+2. Verifica qual pessoa foi selecionada na interface como autora da ação.
+3. Confere se o perfil dessa pessoa possui as permissões necessárias (ex: exigência de CRMV para laudos).
+4. Carimba o CPF do responsável no registro a ser salvo no banco.
+
+**Pós-condições:** Evento autorizado e atrelado ao responsável correto para o histórico de manejo.
+
+---
+
+### UC08 - Mudar para Prenha (`<<extend>>`)
+**Atores:** Sistema (acionado internamente)
+**Pré-condições:** Foi registrado um laudo "Positivo" no UC06.
+**Fluxo Principal:**
+1. O sistema intercepta o resultado positivo do toque.
+2. Aplica a regra de negócio do Padrão State, instanciando o estado "Prenha" para a fêmea.
+3. Atualiza a coluna de estado no banco de dados.
+
+**Pós-condições:** Matriz assume o estado gestacional com sucesso.
+
+---
+
+### UC09 - Mudar para Vazia (`<<extend>>`)
+**Atores:** Sistema (acionado internamente)
+**Pré-condições:** Foi registrado um laudo "Negativo" no UC06.
+**Fluxo Principal:**
+1. O sistema intercepta o resultado negativo do toque (falha na inseminação).
+2. Aplica a regra de negócio do Padrão State, instanciando o estado "Vazia" para a fêmea.
+3. Atualiza a coluna de estado no banco de dados.
+
+**Pós-condições:** Matriz retorna ao estado inicial, pronta para nova tentativa na estação de monta.
