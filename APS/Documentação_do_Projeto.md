@@ -177,17 +177,18 @@ O diagrama reflete nossas regras de negócio e controle de acesso, evidenciando 
 
 ## 4. Diagrama de Classes
 
-O diagrama de classes a seguir apresenta o modelo conceitual (ou de domínio) do sistema, focando estritamente nas regras de negócio e na estrutura de dados central. 
+O diagrama de classes a seguir apresenta o modelo conceitual do sistema, focando estritamente nas regras de negócio e na estrutura de dados central. 
 
 Esta representação ilustra as entidades fundamentais para a gestão reprodutiva e como elas se inter-relacionam, abstraindo temporariamente as camadas de persistência (DAOs) para dar clareza ao domínio. O modelo destaca a aplicação prática dos pilares da Programação Orientada a Objetos (POO), evidenciando:
 
 * **Herança e Abstração:** Estruturadas por meio das superclasses abstratas `Pessoa` e `Animal`, que derivam para suas respectivas classes concretas (`Proprietario`, `Veterinario`, `Macho` e `Femea`). Isso garante o reaproveitamento de código e a especialização correta dos atributos.
 * **Associação:** Demonstrada pela classe `Manejo`, que atua como o elo transacional do sistema, registrando e unindo as ações realizadas pelos responsáveis técnicos (Pessoas) sobre o rebanho (Animais).
-* **Encapsulamento e Segurança:** Representados pelos métodos internos das entidades, que garantem a consistência e a validação prévia dos dados antes de qualquer interação com o banco de dados.
+
 
 Abaixo, o diagrama detalha os atributos, os tipos de dados e as multiplicidades das relações arquitetadas para o escopo do projeto.
 
-classDiagram
+```mermaid
+    classDiagram
     %% Enumerações
     class Raca {
         <<enumeration>>
@@ -252,3 +253,4 @@ classDiagram
     %% Relacionamentos do Manejo
     Manejo "*" --> "1" Animal : realiza
     Manejo "*" --> "1" Pessoa : responsavel
+```
