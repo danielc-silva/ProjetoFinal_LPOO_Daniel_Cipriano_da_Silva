@@ -11,7 +11,7 @@ class TelaPrincipal:
         self.root = root
         self.root.title("Sistema de Gestão Reprodutiva Bovino")
         self.root.geometry("500x350")
-        self.root.eval('tk::PlaceWindow . center') # Centraliza na tela
+        self.root.eval('tk::PlaceWindow . center') # só pra centralizar na tela
 
         tk.Label(self.root, text="Gestão da Fazenda", font=("Arial", 18, "bold")).pack(pady=30)
 
@@ -26,12 +26,12 @@ class TelaPrincipal:
 
     def abrir_tela_pessoas(self):
         janela_pessoas = tk.Toplevel(self.root)
-        app_pessoas = TelaPessoas(janela_pessoas) # Correto e seguro
+        app_pessoas = TelaPessoas(janela_pessoas)
         janela_pessoas.grab_set()
 
     def abrir_tela_animais(self):
         janela_animais = tk.Toplevel(self.root)
-        app_animais = TelaAnimais(janela_animais) # Padronizado e seguro!
+        app_animais = TelaAnimais(janela_animais)
         janela_animais.grab_set()
 
 

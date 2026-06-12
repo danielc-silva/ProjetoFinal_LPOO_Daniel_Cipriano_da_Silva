@@ -32,13 +32,12 @@ class PessoaDAO:
                 raise ValueError("Tipo de pessoa desconhecido.")
 
             query = """
-                INSERT INTO tb_pessoas (cpf, nome, telefone, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO tb_pessoas (cpf, nome, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv) 
+                VALUES (%s, %s, %s, %s, %s, %s)
             """            
             valores = (
                 pessoa.cpf, 
                 pessoa.nome, 
-                pessoa.telefone, 
                 tipo_pessoa, 
                 inscricao_estadual, 
                 nome_fazenda, 
@@ -81,7 +80,6 @@ class PessoaDAO:
             query = """
                 UPDATE tb_pessoas
                 SET nome = %s, 
-                    telefone = %s,
                     tipo_pessoa = %s, 
                     inscricao_estadual = %s,
                     nome_fazenda = %s,
@@ -91,7 +89,6 @@ class PessoaDAO:
             
             valores = (
                 pessoa.nome,
-                pessoa.telefone,
                 tipo_pessoa, 
                 inscricao_estadual,
                 nome_fazenda,
@@ -141,13 +138,13 @@ class PessoaDAO:
             if cursor:
                 cursor.close()
 
-    def listar_todos(self):
+    def listar_todas(self):
         if not self.conexao:
             return []
                 
         try:
             cursor = self.conexao.cursor()
-            query = "SELECT cpf, nome, telefone, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv FROM tb_pessoas"
+            query = "SELECT cpf, nome, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv FROM tb_pessoas"
             
             cursor.execute(query) 
             linhas = cursor.fetchall()
@@ -155,13 +152,12 @@ class PessoaDAO:
             
             for linha in linhas:
                 obj = PessoaFactory.criar_pessoa(
-                    tipo_pessoa=linha[3],
                     cpf=linha[0], 
                     nome=linha[1], 
-                    telefone=linha[2],
-                    inscricao_estadual=linha[4],
-                    nome_fazenda=linha[5],
-                    crmv=linha[6]
+                    tipo_pessoa=linha[2],
+                    inscricao_estadual=linha[3],
+                    nome_fazenda=linha[4],
+                    crmv=linha[5]
                 )
                 pessoas.append(obj)
             
@@ -181,20 +177,19 @@ class PessoaDAO:
                 
         try:
             cursor = self.conexao.cursor()
-            query = "SELECT cpf, nome, telefone, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv FROM tb_pessoas WHERE cpf = %s"
+            query = "SELECT cpf, nome, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv FROM tb_pessoas WHERE cpf = %s"
             
             cursor.execute(query, (cpf,))
             linha = cursor.fetchone() 
             
             if linha:
                 pessoa_encontrada = PessoaFactory.criar_pessoa(
-                    tipo_pessoa=linha[3],
                     cpf=linha[0], 
                     nome=linha[1], 
-                    telefone=linha[2],
-                    inscricao_estadual=linha[4],
-                    nome_fazenda=linha[5],
-                    crmv=linha[6]
+                    tipo_pessoa=linha[2],
+                    inscricao_estadual=linha[3],
+                    nome_fazenda=linha[4],
+                    crmv=linha[5]
                 )
                 return pessoa_encontrada
             else:

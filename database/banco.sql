@@ -5,7 +5,6 @@
 CREATE TABLE tb_pessoas (
     cpf VARCHAR(14) PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    telefone VARCHAR(20) NOT NULL,
 
     tipo_pessoa VARCHAR(20) NOT NULL CHECK (tipo_pessoa IN ('Proprietario', 'Veterinario')),
     

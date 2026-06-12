@@ -1,8 +1,8 @@
 from model.pessoa import Pessoa
 
 class Proprietario(Pessoa):
-    def __init__(self, cpf, nome, telefone, inscricao_estadual, nome_fazenda):
-        super().__init__(cpf, nome, telefone)
+    def __init__(self, cpf, nome, inscricao_estadual, nome_fazenda):
+        super().__init__(cpf, nome)
         self.inscricao_estadual = inscricao_estadual
         self.nome_fazenda = nome_fazenda
 
@@ -34,7 +34,6 @@ class Proprietario(Pessoa):
     def exibir_informacoes(self):
         info = f"CPF: {self.cpf}\n"
         info += f"Nome: {self.nome}\n"
-        info += f"Telefone: {self.telefone}\n"
         info += f"Inscrição Estadual: {self.inscricao_estadual}\n"
         info += f"Nome da Fazenda: {self.nome_fazenda}"
         return info

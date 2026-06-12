@@ -29,7 +29,6 @@ def executar_teste():
         prop = Proprietario(
             cpf=cpf_teste, 
             nome="João da Silva", 
-            telefone="54999999999", 
             inscricao_estadual="123456789", 
             nome_fazenda="Fazenda Esperança"
         )
@@ -44,7 +43,6 @@ def executar_teste():
         prop = PessoaFactory.criar_pessoa("Proprietario",
             cpf="81238070078", 
             nome="João da Silva", 
-            telefone="54999999999", 
             inscricao_estadual="123456789", 
             nome_fazenda="Fazenda Esperança"
         )

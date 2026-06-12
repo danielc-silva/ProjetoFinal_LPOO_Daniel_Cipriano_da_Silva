@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
 
 class Pessoa(ABC):
-    def __init__(self, cpf, nome, telefone):
+    def __init__(self, cpf, nome):
         self.cpf = cpf
         self.nome = nome
-        self.telefone = telefone
 
     @property
     def cpf(self):
@@ -27,18 +26,6 @@ class Pessoa(ABC):
             self.__nome = valor.strip()
         else:
             raise ValueError("O nome não pode estar vazio.")
-
-    @property
-    def telefone(self):
-        return self.__telefone
-    
-    @telefone.setter
-    def telefone(self, valor):
-        digitos = ''.join(filter(str.isdigit, str(valor)))
-        if len(digitos) >= 11:
-            self.__telefone = valor
-        else:
-            raise ValueError("O telefone deve conter ao menos 11 dígitos numéricos incluindo o DDD.")
 
     @staticmethod
     def validar_cpf(cpf):

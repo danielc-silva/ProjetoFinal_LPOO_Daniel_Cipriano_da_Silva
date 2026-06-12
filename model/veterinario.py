@@ -1,8 +1,8 @@
 from model.pessoa import Pessoa
 
 class Veterinario(Pessoa):
-    def __init__(self, cpf, nome, telefone, crmv, especialidade):
-        super().__init__(cpf, nome, telefone)
+    def __init__(self, cpf, nome, crmv):
+        super().__init__(cpf, nome)
         self.crmv = crmv
     @property
     def crmv(self):
@@ -21,7 +21,6 @@ class Veterinario(Pessoa):
     def exibir_informacoes(self):
         info = f"CPF: {self.cpf}\n"
         info += f"Nome: {self.nome}\n"
-        info += f"Telefone: {self.telefone}\n"
         info += f"CRMV: {self.crmv}\n"
         info += f"Especialidade: {self.especialidade}"
         return info
