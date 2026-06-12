@@ -150,32 +150,17 @@ class TelaPessoas:
         self.tree.delete(*self.tree.get_children())
 
         lista_pessoas = self.controller.listar_pessoas()
-        
+
         if not lista_pessoas:
             return
-            
+
         for p in lista_pessoas:
-            if isinstance(p, (tuple, list)):
-                cpf = p[0]
-                nome = p[1]
-                tipo = p[2]
-                inscricao = p[3] if p[3] else "N/A"
-                fazenda = p[4] if p[4] else "N/A"
-                crmv = p[5] if p[5] else "N/A"
-            elif isinstance(p, dict):
-                nome = p.get('nome', '')
-                cpf = p.get('cpf', '')
-                tipo = p.get('tipo_pessoa', '')
-                inscricao = p.get('inscricao_estadual') or "N/A"
-                fazenda = p.get('nome_fazenda') or "N/A"
-                crmv = p.get('crmv') or "N/A"
-            else:
-                nome = getattr(p, 'nome', '')
-                cpf = getattr(p, 'cpf', '')
-                tipo = getattr(p, 'tipo_pessoa', p.__class__.__name__)
-                inscricao = getattr(p, 'inscricao_estadual', '') or 'N/A'
-                fazenda = getattr(p, 'nome_fazenda', '') or 'N/A'
-                crmv = getattr(p, 'crmv', '') or 'N/A'
+            nome = getattr(p, 'nome', '')
+            cpf = getattr(p, 'cpf', '')
+            tipo = getattr(p, 'tipo_pessoa', p.__class__.__name__)
+            inscricao = getattr(p, 'inscricao_estadual', '') or 'N/A'
+            fazenda = getattr(p, 'nome_fazenda', '') or 'N/A'
+            crmv = getattr(p, 'crmv', '') or 'N/A'
 
             self.tree.insert("", tk.END, values=(nome, cpf, tipo, inscricao, fazenda, crmv))
 
