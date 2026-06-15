@@ -2,10 +2,9 @@ from model.animal import Animal
 from model.estados_reprodutivos import EstadoVazia, EstadoInseminada, EstadoPrenha
 
 class Femea(Animal):
-    def __init__(self, brinco, raca, data_nascimento):
+    def __init__(self, brinco, raca, data_nascimento, estado_reprodutivo="Vazia"):
         super().__init__(brinco, raca, data_nascimento)
-        # nasceu, no caso foi cadastrada inicia como estado de vazia
-        self._estado_objeto = EstadoVazia()
+        self.estado_reprodutivo = estado_reprodutivo
 
     @property
     def estado_reprodutivo(self):
@@ -13,7 +12,7 @@ class Femea(Animal):
 
     @estado_reprodutivo.setter
     def estado_reprodutivo(self, valor_do_banco):
-        if valor_do_banco == "Vazia":
+        if not valor_do_banco or valor_do_banco == "Vazia":
             self._estado_objeto = EstadoVazia()
         elif valor_do_banco == "Inseminada":
             self._estado_objeto = EstadoInseminada()

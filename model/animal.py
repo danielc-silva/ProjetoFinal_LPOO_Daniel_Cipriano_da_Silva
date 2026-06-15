@@ -51,7 +51,8 @@ class Animal(ABC):
         if isinstance(data_recebida, date):
             return data_recebida
         try:
-            temporario = datetime.strptime(data_recebida, "%d-%m-%Y")
+            data_limpa = data_recebida.replace('/', '-')
+            temporario = datetime.strptime(data_limpa, "%d-%m-%Y")
             return temporario.date()
         except ValueError:
-            raise ValueError(f"ERRO: Data '{data_recebida}' em formato inválido. Use DD-MM-YYYY.")
+            raise ValueError(f"ERRO: Data '{data_recebida}' inválida. Use DD/MM/YYYY.")
