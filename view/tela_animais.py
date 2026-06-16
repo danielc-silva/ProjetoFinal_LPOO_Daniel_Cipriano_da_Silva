@@ -6,7 +6,6 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 from model.raca import Raca
 
-# Presumindo que você criará o AnimalController seguindo o mesmo padrão do PessoaController
 from controller.animais_controller import AnimalController
 
 class TelaAnimais:
@@ -15,11 +14,11 @@ class TelaAnimais:
         
         self.master = master
         self.master.title("Gerenciar Animais")
-        self.master.geometry("900x650") # Ajustado para o mesmo tamanho da tela de Pessoas
+        self.master.geometry("900x650")
 
         tk.Label(self.master, text="Cadastro de Animais (Matrizes e Reprodutores)", font=("Arial", 14, "bold")).pack(pady=15)
 
-        # --- Formulário de Cadastro ---
+        # from de cadastro
         frame_form = tk.Frame(self.master)
         frame_form.pack(pady=10)
 
@@ -30,7 +29,7 @@ class TelaAnimais:
         self.ent_brinco.grid(row=0, column=1, pady=5, sticky="w")
 
         tk.Label(frame_form, text="Raça:").grid(row=1, column=0, padx=5, sticky="e")
-        # Ajustei a largura do Combobox para alinhar melhor com os Entries de largura 40
+
         self.cb_raca = ttk.Combobox(frame_form, values=[r.value for r in Raca], width=37, state="readonly")
         self.cb_raca.grid(row=1, column=1, pady=5, sticky="w")
 
@@ -44,23 +43,22 @@ class TelaAnimais:
         frame_radios = tk.Frame(frame_form)
         frame_radios.grid(row=3, column=1, sticky="w")
         
-        # O comando 'atualizar_campos' é chamado ao trocar a bolinha, igualzinho na TelaPessoas
+        # chama atualizar campos quando troca de femea para macho pois há campos que devem ser desativados
         tk.Radiobutton(frame_radios, text="Fêmea", variable=self.var_tipo, value="Femea", command=self.atualizar_campos).pack(side="left")
         tk.Radiobutton(frame_radios, text="Macho", variable=self.var_tipo, value="Macho", command=self.atualizar_campos).pack(side="left", padx=10)
 
-        # Campo exclusivo de FÊMEA
+        # exclusivo para femeas
         self.lbl_estado = tk.Label(frame_form, text="Estado Reprodutivo:")
         self.lbl_estado.grid(row=4, column=0, padx=5, sticky="e")
         self.cb_estado = ttk.Combobox(frame_form, values=["Vazia", "Inseminada", "Prenha"], width=37, state="readonly")
         self.cb_estado.grid(row=4, column=1, pady=5, sticky="w")
 
-        # Campo exclusivo de MACHO
+        # exclusivo para machos
         self.lbl_castrado = tk.Label(frame_form, text="Castrado:", state="disabled")
         self.lbl_castrado.grid(row=5, column=0, padx=5, sticky="e")
         self.cb_castrado = ttk.Combobox(frame_form, values=["Sim", "Não"], width=37, state="disabled")
         self.cb_castrado.grid(row=5, column=1, pady=5, sticky="w")
 
-        # --- Botões (Idênticos aos da TelaPessoas) ---
         frame_btns = tk.Frame(self.master)
         frame_btns.pack(pady=15)
         tk.Button(frame_btns, text="Salvar Novo", width=12, bg="#017951", fg="white", command=self.acao_salvar).pack(side="left", padx=5)
@@ -68,7 +66,7 @@ class TelaAnimais:
         tk.Button(frame_btns, text="Remover", width=12, bg="#d9534f", fg="white", command=self.acao_remover).pack(side="left", padx=5)
         tk.Button(frame_btns, text="Limpar", width=12, command=self.limpar_campos).pack(side="left", padx=5)
 
-        # --- Lista de Animais Cadastrados (Treeview) ---
+        # Lista de Animais Cadastrados
         self.tree = ttk.Treeview(self.master, columns=("brinco", "raca", "nascimento", "tipo", "estado", "castrado"), show="headings")
         self.tree.heading("brinco", text="Brinco")
         self.tree.heading("raca", text="Raça")
@@ -86,10 +84,9 @@ class TelaAnimais:
         
         self.tree.pack(pady=10, fill="both", expand=True, padx=20)
 
-        # Clicou na linha, preenche o form
+        # clicou na linha, preenche o form
         self.tree.bind("<<TreeviewSelect>>", self.preencher_formulario)
 
-        # Inicia a tela atualizando os campos e a tabela
         self.atualizar_campos()
         self.atualizar_tabela()
 
@@ -143,7 +140,6 @@ class TelaAnimais:
         self.cb_raca.set(raca)
         self.ent_nasc.insert(0, nascimento)
         
-        # Bloqueia a Chave Primária (Brinco)
         self.ent_brinco.config(state="disabled")
         
         if tipo == "Femea":

@@ -156,7 +156,7 @@ class AnimalDAO:
 
                 obj = AnimalFactory.criar_animal(
                     brinco=brinco_banco,
-                    raca=raca_enum, # <--- CORREÇÃO: Usando o enum convertido, e não a linha[1] direta!
+                    raca=raca_enum,
                     data_nascimento=linha[2],
                     tipo_animal=linha[3],
                     is_castrado=linha[4], 
@@ -196,8 +196,8 @@ class AnimalDAO:
                     brinco=int(linha[0]),
                     raca=raca_enum, 
                     data_nascimento=linha[2],
-                    is_castrado=linha[4],  # <--- CORREÇÃO: O nome do parâmetro estava errado aqui!
-                    estado_reprodutivo=linha[5] # <--- Agora passamos direto para a Factory
+                    is_castrado=linha[4],
+                    estado_reprodutivo=linha[5]
                 )
                 
                 return animal_encontrado
