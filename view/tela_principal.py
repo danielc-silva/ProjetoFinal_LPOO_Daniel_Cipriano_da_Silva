@@ -5,6 +5,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import tkinter as tk
 from view.tela_pessoas import TelaPessoas
 from view.tela_animais import TelaAnimais
+from view.tela_manejos import TelaManejos
+
+from controller.manejos_controller import ManejoController
 
 class TelaPrincipal:
     def __init__(self, root):
@@ -34,6 +37,9 @@ class TelaPrincipal:
         btn_manejos = tk.Button(frame_gerais, text="Cadastrar Manejo", width=25, height=2, command=self.abrir_tela_manejos)
         btn_manejos.grid(row=0, column=0, pady=10)
 
+
+
+
     def abrir_tela_pessoas(self):
         janela_pessoas = tk.Toplevel(self.root)
         app_pessoas = TelaPessoas(janela_pessoas)
@@ -48,6 +54,9 @@ class TelaPrincipal:
         janela_manejos = tk.Toplevel(self.root)
         app_manejos = TelaManejos(janela_manejos)
         janela_manejos.grab_set()
+
+
+
 
 
 if __name__ == "__main__":

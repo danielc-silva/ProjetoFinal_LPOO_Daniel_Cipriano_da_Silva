@@ -86,6 +86,9 @@ class TelaPessoas:
         # Atualizar sempre
         self.atualizar_tabela()
 
+
+
+
     def atualizar_campos(self):
         if self.var_tipo.get() == "Veterinario":
             self.lbl_crmv.config(state="normal")

@@ -11,6 +11,7 @@ from model.raca import Raca
 class AnimalDAO:
     def __init__(self):
         self.conexao = DatabaseConfig.get_connection()
+        
 
     def salvar(self, obj_animal):
         if not self.conexao:
@@ -55,6 +56,7 @@ class AnimalDAO:
         finally:
             if cursor:
                 cursor.close()
+
 
     def atualizar(self, obj_animal):
         if not self.conexao:
@@ -110,6 +112,7 @@ class AnimalDAO:
             if cursor:
                 cursor.close()
 
+
     def remover(self, brinco):
         if not self.conexao:
             return False, "Sem conexão com o banco."
@@ -133,6 +136,7 @@ class AnimalDAO:
         finally:
             if cursor:
                 cursor.close()
+
 
     def listar_todos(self):
         if not self.conexao:
@@ -173,6 +177,7 @@ class AnimalDAO:
         finally:
             if cursor:
                 cursor.close()
+
 
     def buscar_por_brinco(self, brinco):
         if not self.conexao:

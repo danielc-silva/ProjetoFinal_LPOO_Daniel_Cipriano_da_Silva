@@ -44,18 +44,17 @@ class Manejo:
     @property
     def resultado_diagnostico(self):
         return self.__resultado_diagnostico
-    
+
     @resultado_diagnostico.setter
     def resultado_diagnostico(self, valor):
-        # É opcional, só importa se for Diagnóstico
-        if valor is None:
+        if valor in [None, "", "N/A"]:
             self.__resultado_diagnostico = None
+            
+        elif valor not in ["Positivo", "Negativo"]:
+            raise ValueError("O resultado do diagnóstico deve ser 'Positivo' ou 'Negativo'!")
+            
         else:
-            resultados_validos = ['Positivo', 'Negativo']
-            if valor in resultados_validos:
-                self.__resultado_diagnostico = valor
-            else:
-                raise ValueError(f"Resultado de diagnóstico inválido. Escolha entre: {', '.join(resultados_validos)}")
+            self.__resultado_diagnostico = valor
 
     def valida_data(self, data_recebida):
         if data_recebida is None:

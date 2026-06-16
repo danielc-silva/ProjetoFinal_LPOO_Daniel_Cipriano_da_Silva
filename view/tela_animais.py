@@ -90,6 +90,9 @@ class TelaAnimais:
         self.atualizar_campos()
         self.atualizar_tabela()
 
+
+
+
     def atualizar_campos(self):
         """Ativa/Desativa campos dependendo se é Macho ou Fêmea"""
         if self.var_tipo.get() == "Macho":
