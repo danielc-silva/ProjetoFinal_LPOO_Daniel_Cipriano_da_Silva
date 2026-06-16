@@ -152,17 +152,16 @@ class AnimalDAO:
                 except ValueError:
                     raca_enum = Raca[linha[1].upper()]
 
+                brinco_banco = int(linha[0])
+
                 obj = AnimalFactory.criar_animal(
-                    tipo_animal=linha[3],
-                    brinco=int(linha[0]),
-                    raca=raca_enum, 
+                    brinco=brinco_banco,
+                    raca=raca_enum, # <--- CORREÇÃO: Usando o enum convertido, e não a linha[1] direta!
                     data_nascimento=linha[2],
-                    castrado=linha[4]
+                    tipo_animal=linha[3],
+                    is_castrado=linha[4], 
+                    estado_reprodutivo=linha[5]
                 )
-                
-                if isinstance(obj, Femea):
-                    obj.estado_reprodutivo = linha[5]
-                    
                 animais.append(obj)
             
             return animais
@@ -197,12 +196,10 @@ class AnimalDAO:
                     brinco=int(linha[0]),
                     raca=raca_enum, 
                     data_nascimento=linha[2],
-                    castrado=linha[4]
+                    is_castrado=linha[4],  # <--- CORREÇÃO: O nome do parâmetro estava errado aqui!
+                    estado_reprodutivo=linha[5] # <--- Agora passamos direto para a Factory
                 )
                 
-                if isinstance(animal_encontrado, Femea):
-                    animal_encontrado.estado_reprodutivo = linha[5]
-                    
                 return animal_encontrado
             else:
                 return None

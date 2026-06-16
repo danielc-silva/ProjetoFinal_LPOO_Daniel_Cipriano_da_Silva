@@ -154,22 +154,28 @@ class TelaAnimais:
     def atualizar_tabela(self):
         self.tree.delete(*self.tree.get_children())
 
-        # O Controller buscará os animais no banco
         lista_animais = self.controller.listar_animais()
 
         if not lista_animais:
             return
 
-        # Padrão limpo e direto usando getattr (mesmo da TelaPessoas)
         for a in lista_animais:
             brinco = getattr(a, 'brinco', '')
-            raca = getattr(a, 'raca', '')
-            nascimento = getattr(a, 'data_nascimento', '')
+            
+            raca_obj = getattr(a, 'raca', '')
+            raca = raca_obj.value if hasattr(raca_obj, 'value') else raca_obj
+            
+            nascimento_cru = getattr(a, 'data_nascimento', '')
+            if hasattr(nascimento_cru, 'strftime'):
+                nascimento = nascimento_cru.strftime('%d/%m/%Y')
+            else:
+                nascimento = nascimento_cru
+                
             tipo = getattr(a, 'tipo_animal', a.__class__.__name__)
             estado = getattr(a, 'estado_reprodutivo', '') or 'N/A'
-            castrado = getattr(a, 'is_castrado', '') 
             
-            # Tratamento visual para o booleano de castrado (se vier True/False do banco)
+            castrado = getattr(a, 'castrado', None) 
+            
             if castrado is True or castrado == "Sim":
                 str_castrado = "Sim"
             elif castrado is False or castrado == "Não":
@@ -178,6 +184,7 @@ class TelaAnimais:
                 str_castrado = "N/A"
 
             self.tree.insert("", tk.END, values=(brinco, raca, nascimento, tipo, estado, str_castrado))
+
 
     def acao_salvar(self):
         brinco_str = self.ent_brinco.get().strip()
