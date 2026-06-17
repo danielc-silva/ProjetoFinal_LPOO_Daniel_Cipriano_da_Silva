@@ -29,7 +29,7 @@ O sistema consiste em um software de gestão e controle reprodutivo para rebanho
 | :--- | :--- | :--- | :--- |
 | **RN01** | Uma fêmea que se encontra no estado "Vazia" ou "Inseminada" não poderá receber o registro de um evento de "Parto" ou "Aborto". | Alta | RF08, RF09, RF12 |
 | **RN02** | Todo evento reprodutivo registrado (Inseminação, Diagnóstico, Parto, Aborto) deverá possuir obrigatoriamente um Médico Veterinário ou Proprietário responsável atrelado. | Alta | RF04, RF06, RF08, RF12 |
-| **RN03** | Apenas usuários cadastrados e logados como Médicos Veterinários (CRMV válido) terão permissão para acessar e registrar o Diagnóstico de Gestação (Toque). | Alta | RF06 |
+| **RN03** | O sistema deve restringir o registro de "Diagnóstico de Gestação (Toque)" exclusivamente para perfis de Médicos Veterinários, bloqueando a opção na interface e invalidando o campo de resultado caso um Proprietário seja selecionado como responsável. | Alta | RF06 |
 
 ### c) Requisitos Não Funcionais (RNF)
 
@@ -47,7 +47,7 @@ Abaixo apresentamos o Diagrama de Casos de Uso do sistema. Este modelo visual de
 
 O diagrama reflete nossas regras de negócio e controle de acesso, evidenciando a separação de papéis entre o **Proprietário** (focado na gestão e registros cotidianos) e o **Veterinário** (com exclusividade técnica sobre laudos clínicos). Além disso, destaca a reutilização de rotinas através de relacionamentos de `<<include>>` para a validação de responsáveis, e fluxos condicionais de `<<extend>>` para transições de estados reprodutivos.
 
-![Diagrama de Casos de Uso do Sistema da Fazenda](diagramas/diagrama_casos_de_uso.png)
+![Diagrama de Casos de Uso do Sistema](diagramas/diagrama_casos_de_uso.png)
 
 ## 3. Especificação dos Casos de Uso
 
@@ -187,70 +187,36 @@ Esta representação ilustra as entidades fundamentais para a gestão reprodutiv
 
 Abaixo, o diagrama detalha os atributos, os tipos de dados e as multiplicidades das relações arquitetadas para o escopo do projeto.
 
-```mermaid
-    classDiagram
-    %% Enumerações
-    class Raca {
-        <<enumeration>>
-        ANGUS
-        BRAFORD
-        NELORE
-        HOLANDES
-    }
+![Diagrama de Classes Sistema](diagramas/diagrama_classes_classes_bases.png)
 
-    %% Hierarquia de Pessoa
-    class Pessoa {
-        <<abstract>>
-        -cpf: str
-        -nome: str
-        -telefone: str
-        +valida_cpf()
-        +exibir_informacoes()
-    }
-    class Proprietario {
-        -inscricao_estadual: str
-        -nome_fazenda: str
-    }
-    class Veterinario {
-        -crmv: str
-    }
-    Pessoa <|-- Proprietario : Herança
-    Pessoa <|-- Veterinario : Herança
 
-    %% Hierarquia de Animal
-    class Animal {
-        <<abstract>>
-        -brinco: int
-        -raca: Raca
-        -data_nascimento: date
-        +valida_brinco()
-        +exibir_informacoes()
-    }
-    class Macho {
-        -is_castrado: bool
-    }
-    class Femea {
-        -estado_reprodutivo: str
-        -data_ultima_inseminacao :  date
-    }
-    Animal <|-- Macho : Herança
-    Animal <|-- Femea : Herança
-    Animal --> Raca : Associação
 
-    %% Classe de Associação (Manejo)
-    class Manejo {
-        -id_manejo: int
-        -brinco_animal: int
-        -cpf_responsavel: str
-        -data_evento: date
-        -tipo_evento: str
-        -resultado_diagnostico: str
-        -observacao: str
-        +valida_data()
-        +exibir_informacoes()
-    }
-    
-    %% Relacionamentos do Manejo
-    Manejo "*" --> "1" Animal : realiza
-    Manejo "*" --> "1" Pessoa : responsavel
-```
+
+## 5. Diagrama de Estados
+
+O Diagrama de Estados a seguir ilustra o ciclo de vida reprodutivo das matrizes bovinas dentro do sistema. Este modelo visual foi desenvolvido para representar diretamente a implementação do Padrão de Projeto Comportamental **State**, arquitetado na camada de modelo do software através da classe `Femea` e das subclasses derivadas de `EstadoReprodutivo`.
+
+A utilização deste diagrama e do respectivo padrão de projeto garante o cumprimento rigoroso das regras de negócio (como a RN01), impedindo a execução de ações ilógicas no sistema, como tentar registrar um parto para uma matriz que não se encontra em período gestacional. O comportamento da entidade altera-se dinamicamente conforme o seu estado atual, seguindo as seguintes transições:
+
+* **Vazia:** Configura o estado inicial de toda matriz cadastrada no sistema. Neste estado, o animal está apto para reprodução, sendo a chamada do método `registrar_inseminacao()` o único gatilho válido para avanço no ciclo reprodutivo.
+* **Inseminada:** Estado de transição onde a matriz aguarda a confirmação de prenhez através de um exame de toque. A partir deste ponto, o sistema exige um laudo veterinário. Se o método `diagnosticar(Positivo)` for acionado, a fêmea transita para o estado "Prenha". Se for acionado `diagnosticar(Negativo)`, confirmando falha no procedimento, a matriz retorna imediatamente ao estado "Vazia".
+* **Prenha:** Representa o período gestacional consolidado. O ciclo neste estado só pode ser encerrado através dos eventos de `registrar_parto()` (sucesso) ou `registrar_aborto()` (interrupção). Em ambos os cenários, o sistema reinicia o ciclo, retornando a matriz ao estado "Vazia" para que possa participar de futuras estações de monta.
+
+![Diagrama de Estados do Sistema](diagramas/diagrama_de_estados.jpg)
+
+## 6. Considerações Finais
+**Desafios Encontrados:**
+O principal desafio durante o desenvolvimento foi garantir a integridade do banco de dados relacional e espelhar as regras de negócio de forma isolada do banco e da interface gráfica. A implementação do Padrão State para transição do ciclo reprodutivo (Vazia -> Inseminada -> Prenha) exigiu um planejamento cuidadoso para que a herança e o polimorfismo funcionassem corretamente junto com o Tkinter e a persistência de dados. Além disso, lidar com eventos assíncronos de interface (como o debounce/cronômetro nas caixas de pesquisa) foi um desafio técnico contornado com sucesso.
+
+**Aprendizados:**
+A integração entre Análise, Projeto (APS) e Implementação (LPOO) consolidou a percepção de que um sistema bem modelado previamente no papel (UML) economiza drásticas horas de refatoração no código. A separação em camadas (MVC) aliada aos padrões DAO, Factory e State demonstraram o poder da Orientação a Objetos na criação de softwares com baixo acoplamento e alta coesão, facilitando a manutenção e a escalabilidade do sistema.
+
+**Melhorias Futuras:**
+* Implementar a geração de relatórios em PDF com o histórico de manejos para impressão do proprietário.
+* Criar um dashboard gráfico (com bibliotecas como Matplotlib) na tela principal indicando a porcentagem do rebanho que se encontra prenha.
+* Adicionar controle de acesso por login e senha, diferenciando visualmente as permissões de Proprietários e Veterinários.
+
+## 7. Referências
+* **Fontes e Ferramentas de Edição:** StackEdit e Visual Paradigm.
+* **Linguagem e GUI:** Python 3.11 e biblioteca Tkinter.
+* **Banco de Dados:** PostgreSQL e driver psycopg2.
