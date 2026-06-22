@@ -9,7 +9,7 @@ class TelaPrincipal:
     def __init__(self, root):
         self.root = root
         self.root.title("Sistema de Gestão Reprodutiva Bovino")
-        self.root.geometry("500x380")
+        self.root.geometry("600x420")
         self.root.eval('tk::PlaceWindow . center') # só pra centralizar na tela
 
         tk.Label(self.root, text="Gestão da Fazenda", font=("Arial", 18, "bold")).pack(pady=12)
@@ -32,6 +32,17 @@ class TelaPrincipal:
 
         btn_manejos = tk.Button(frame_gerais, text="Cadastrar Manejo", width=25, height=2, command=self.abrir_tela_manejos)
         btn_manejos.grid(row=0, column=0, pady=10)
+
+        frame_sobre = tk.Frame(self.root)
+        frame_sobre.pack(side="bottom", pady=15)
+
+        tk.Label(frame_sobre, text="Sobre o Sistema", font=("Arial", 15, "bold")).pack()
+        
+        texto_sobre = (
+            "Software acadêmico para gestão reprodutiva de rebanhos bovinos.\n"
+            "Controla o cadastro de animais, responsáveis e o histórico de manejos."
+        )
+        tk.Label(frame_sobre, text=texto_sobre, font=("Arial", 8), fg="#666666", justify="center").pack()
 
 
 
