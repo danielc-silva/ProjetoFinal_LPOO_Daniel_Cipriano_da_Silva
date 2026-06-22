@@ -22,5 +22,4 @@ class Veterinario(Pessoa):
         info = f"CPF: {self.cpf}\n"
         info += f"Nome: {self.nome}\n"
         info += f"CRMV: {self.crmv}\n"
-        info += f"Especialidade: {self.especialidade}"
         return info
