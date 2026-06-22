@@ -71,11 +71,11 @@ class TelaPessoas:
         self.tree.heading("fazenda", text="Fazenda")
         self.tree.heading("crmv", text="CRMV")
         
-        self.tree.column("nome", width=180)
+        self.tree.column("nome", width=180, anchor="center")
         self.tree.column("cpf", width=120, anchor="center")
         self.tree.column("tipo", width=100, anchor="center")
-        self.tree.column("inscricao", width=120)
-        self.tree.column("fazenda", width=150)
+        self.tree.column("inscricao", width=120, anchor="center")
+        self.tree.column("fazenda", width=150, anchor="center")
         self.tree.column("crmv", width=100, anchor="center")
         
         self.tree.pack(pady=10, fill="both", expand=True, padx=20)
@@ -168,7 +168,7 @@ class TelaPessoas:
             self.tree.insert("", tk.END, values=(nome, cpf, tipo, inscricao, fazenda, crmv))
 
     def acao_salvar(self):
-        nome = self.ent_nome.get().strip()
+        nome = self.ent_nome.get().strip().title()
         cpf = self.ent_cpf.get().strip()
         tipo = self.var_tipo.get()
         inscricao = self.ent_inscricao.get().strip()

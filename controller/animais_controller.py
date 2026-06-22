@@ -20,7 +20,7 @@ class AnimalController:
             return False, "O campo Brinco deve ser um número inteiro!"
 
         try:
-            raca_enum = Raca(raca_str)
+            raca_enum = Raca(raca_str.lower())
 
             if tipo_str == "Femea":
                 novo_animal = AnimalFactory.criar_animal(
@@ -67,7 +67,7 @@ class AnimalController:
             return False, "O campo Brinco deve ser um número inteiro!"
 
         try:
-            raca_enum = Raca(raca_str)
+            raca_enum = Raca(raca_str.lower())
 
             if tipo_str == "Femea":
                 animal_editado = AnimalFactory.criar_animal(

@@ -30,7 +30,7 @@ class TelaAnimais:
 
         tk.Label(frame_form, text="Raça:").grid(row=1, column=0, padx=5, sticky="e")
 
-        self.cb_raca = ttk.Combobox(frame_form, values=[r.value for r in Raca], width=37, state="readonly")
+        self.cb_raca = ttk.Combobox(frame_form, values=[r.value.title() for r in Raca], width=37, state="readonly")
         self.cb_raca.grid(row=1, column=1, pady=5, sticky="w")
 
         tk.Label(frame_form, text="Nascimento (DD/MM/YYYY):").grid(row=2, column=0, padx=5, sticky="e")
@@ -76,7 +76,7 @@ class TelaAnimais:
         self.tree.heading("castrado", text="Castrado")
         
         self.tree.column("brinco", width=80, anchor="center")
-        self.tree.column("raca", width=150)
+        self.tree.column("raca", width=150, anchor="center")
         self.tree.column("nascimento", width=100, anchor="center")
         self.tree.column("tipo", width=80, anchor="center")
         self.tree.column("estado", width=120, anchor="center")
@@ -163,6 +163,8 @@ class TelaAnimais:
             
             raca_obj = getattr(a, 'raca', '')
             raca = raca_obj.value if hasattr(raca_obj, 'value') else raca_obj
+
+            raca = raca.title()
             
             nascimento_cru = getattr(a, 'data_nascimento', '')
             if hasattr(nascimento_cru, 'strftime'):
@@ -187,7 +189,7 @@ class TelaAnimais:
 
     def acao_salvar(self):
         brinco_str = self.ent_brinco.get().strip()
-        raca = self.cb_raca.get().strip()
+        raca = self.cb_raca.get().strip().title()
         nasc = self.ent_nasc.get().strip()
         tipo = self.var_tipo.get()
         estado = self.cb_estado.get().strip()
@@ -224,7 +226,7 @@ class TelaAnimais:
             messagebox.showwarning("Aviso", "O campo Brinco precisa ser um número inteiro válido!")
             return
 
-        raca = self.cb_raca.get().strip()
+        raca = self.cb_raca.get().strip().title()
         nasc = self.ent_nasc.get().strip()
         tipo = self.var_tipo.get()
         estado = self.cb_estado.get().strip()
