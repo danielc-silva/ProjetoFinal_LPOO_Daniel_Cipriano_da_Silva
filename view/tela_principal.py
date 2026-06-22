@@ -1,7 +1,3 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 import tkinter as tk
 from view.tela_pessoas import TelaPessoas
 from view.tela_animais import TelaAnimais
@@ -54,12 +50,3 @@ class TelaPrincipal:
         janela_manejos = tk.Toplevel(self.root)
         app_manejos = TelaManejos(janela_manejos)
         janela_manejos.grab_set()
-
-
-
-
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = TelaPrincipal(root)
-    root.mainloop()
