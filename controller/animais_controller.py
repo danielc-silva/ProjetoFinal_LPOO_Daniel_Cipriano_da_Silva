@@ -43,9 +43,13 @@ class AnimalController:
             else:
                 return False, "Erro: O tipo de animal selecionado é inválido!"
 
-            self.animal_dao.salvar(novo_animal)
-            return True, f"Animal salvo com sucesso!"
-
+            sucesso, msg = self.animal_dao.salvar(novo_animal)
+            
+            if not sucesso:
+                return False, msg
+                
+            return True, msg
+            
         except ValueError as e:
             return False, str(e) 
         except Exception as e:

@@ -1,5 +1,6 @@
 import sys
 import os
+import psycopg2
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from model.proprietario import Proprietario
@@ -13,8 +14,9 @@ class PessoaDAO:
 
     def salvar(self, pessoa):
         if not self.conexao:
-            raise Exception("Sem conexão com o Banco de Dados")
+            return False, "Sem conexão com o Banco de Dados"
         
+        cursor = None
         try:
             cursor = self.conexao.cursor()
             
@@ -35,23 +37,18 @@ class PessoaDAO:
                 INSERT INTO tb_pessoas (cpf, nome, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv) 
                 VALUES (%s, %s, %s, %s, %s, %s)
             """            
-            valores = (
-                pessoa.cpf, 
-                pessoa.nome, 
-                tipo_pessoa, 
-                inscricao_estadual, 
-                nome_fazenda, 
-                crmv
-            )
+            valores = (pessoa.cpf, pessoa.nome, tipo_pessoa, inscricao_estadual, nome_fazenda, crmv)
             
             cursor.execute(query, valores)            
             self.conexao.commit()
             return True, "Pessoa cadastrada com sucesso!"
 
-        except Exception as e:
-            print(f"Erro ao inserir pessoa com CPF ({pessoa.cpf}): {e}")
+        except psycopg2.errors.UniqueViolation: # captura do banco o erro de CPF duplicado
             self.conexao.rollback()
-            return False, str(e)
+            return False, "Erro: Este CPF já está cadastrado no sistema!"
+        except Exception as e:
+            self.conexao.rollback()
+            return False, f"Erro ao salvar: {e}"
         
         finally:
             if cursor:

@@ -35,8 +35,8 @@ class PessoaController:
             else:
                 return False, "Erro: O tipo de pessoa selecionado é inválido!"
 
-            self.pessoa_dao.salvar(nova_pessoa)
-            return True, f"{tipo_str} salvo com sucesso!"
+            sucesso, msg = self.pessoa_dao.salvar(nova_pessoa)
+            return sucesso, msg
 
         except Exception as e:
             return False, f"Falha ao salvar no banco de dados: {e}"
@@ -57,7 +57,7 @@ class PessoaController:
                     inscricao_estadual=inscricao_str,
                     nome_fazenda=fazenda_str
                 )
-            elif tipo_str == "Veterinario": # <-- AGORA É ELIF
+            elif tipo_str == "Veterinario":
                 pessoa_editada = PessoaFactory.criar_pessoa(
                     tipo_pessoa="Veterinario", 
                     nome=nome_str, 
